@@ -26,13 +26,13 @@ function runMainBundle(): Promise<any> {
       if (stats && stats.hasErrors()) {
         console.log(stats.toString());
       }
-      if (mainProcess && mainProcess.kill) {
-        // 主进程设置为热重启状态
+      if (mainProcess) {
         electronRestart = true;
-
+        mainProcess.removeAllListeners('close');
         // 监听主进程关闭事件
-        mainProcess.on('close', () => {
-          // 设置主进程为非热重启状态
+        mainProcess.once('close', () => {
+          // 重启Electron
+          startElectron();
           electronRestart = false;
         });
         // 杀死electron进程
@@ -41,9 +41,6 @@ function runMainBundle(): Promise<any> {
         }
         // 清空进程
         mainProcess = null;
-
-        // 重启Electron
-        startElectron();
       }
     });
     compiler.hooks.done.tap('ElectronMainDone', () => r(true));

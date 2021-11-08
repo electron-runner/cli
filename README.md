@@ -27,5 +27,5 @@
 
 ## 社区
 
-- [github](https://github.com/leo-ran/electron-runner-cli)
-- [项目模板仓库](https://github.com/leo-ran/electron-template)
+- [github](https://github.com/electron-runner/cli)
+- [项目模板仓库](https://github.com/electron-runner/template)

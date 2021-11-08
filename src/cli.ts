@@ -8,7 +8,7 @@ import inquirer from 'inquirer';
 
 const cwd = process.cwd();
 const VERSION: string = require('../package').version;
-const repo = 'leo-ran/electron-template';
+const repo = 'electron-runner/template';
 const { spawn } = require('child_process');
 
 program.version(VERSION, '-v, --version');

@@ -1,9 +1,11 @@
-import { Configuration, RuleSetUseItem } from 'webpack';
+import webpack, { Configuration, RuleSetUseItem } from 'webpack';
 import { Configuration as DevServerConfiguration } from 'webpack-dev-server';
 import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin';
+// const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+
 import merge from 'webpack-merge';
 import fs from 'fs';
 import { ElectronRunnerConfig } from './index';
@@ -55,7 +57,10 @@ const sassLoaderOption: RuleSetUseItem = {
 
 const tsLoaderOption: RuleSetUseItem = {
   loader: 'ts-loader',
-  options: {},
+  options: {
+    // disable type checker - we will use it in fork plugin
+    transpileOnly: true,
+  },
 };
 
 const devServerOption: DevServerConfiguration = {
@@ -163,6 +168,12 @@ let config: Configuration = {
     global: true,
   },
   plugins: [
+    // https://www.npmjs.com/package/fork-ts-checker-webpack-plugin
+    // new ForkTsCheckerWebpackPlugin(),
+    // https://www.npmjs.com/package/ts-loader
+    new webpack.WatchIgnorePlugin({
+      paths: [/\.js$/, /\.d\.ts$/],
+    }),
     // https://github.com/jantimon/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: 'index.html',

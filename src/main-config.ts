@@ -1,4 +1,4 @@
-import { Configuration } from 'webpack';
+import webpack, { Configuration } from 'webpack';
 import path from 'path';
 const isProduction = process.env.NODE_ENV === 'production';
 const cwd = process.cwd();
@@ -25,6 +25,11 @@ export const mainConfig: Configuration = {
     __filename: !isProduction,
     global: true,
   },
+  plugins: [
+    new webpack.WatchIgnorePlugin({
+      paths: [/\.js$/, /\.d\.ts$/],
+    }),
+  ],
   resolve: {
     extensions: ['.ts', '.js', '.json', '.node'],
   },
