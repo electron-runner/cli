@@ -1,5 +1,5 @@
-import {Configuration, Plugin, RuleSetRule, RuleSetUseItem} from "webpack";
-import {Configuration as DevServerConfiguration} from "webpack-dev-server";
+import { Configuration, RuleSetRule, RuleSetUseItem } from 'webpack';
+import { Configuration as DevServerConfiguration } from 'webpack-dev-server';
 
 export interface ElectronRunnerConfig {
   webpack?: Configuration;

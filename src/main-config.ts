@@ -1,34 +1,34 @@
-import {Configuration} from "webpack";
-import path from "path";
-const isProduction = process.env.NODE_ENV === "production"
-
+import { Configuration } from 'webpack';
+import path from 'path';
+const isProduction = process.env.NODE_ENV === 'production';
 const cwd = process.cwd();
-const sourcePath = path.join(cwd, "src", "main");
+const sourcePath = path.join(cwd, 'src', 'main');
 
 export const mainConfig: Configuration = {
   entry: sourcePath,
-  output:{
-    filename:  "[name].js",
-    libraryTarget: "commonjs2",
-    path: path.join(cwd, "dist", "application")
+  output: {
+    filename: '[name].js',
+    libraryTarget: 'commonjs2',
+    path: path.join(cwd, 'dist', 'application'),
   },
-  module:{
-    rules:[
+  module: {
+    rules: [
       {
-        test:/\.ts$/,
-        exclude:/node_modules/,
-        use: "ts-loader"
-      }
-    ]
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        use: 'ts-loader',
+      },
+    ],
   },
   node: {
     __dirname: !isProduction,
-    __filename: !isProduction
+    __filename: !isProduction,
+    global: true,
   },
   resolve: {
-    extensions: [".ts",  ".js",".json", ".node"]
+    extensions: ['.ts', '.js', '.json', '.node'],
   },
-  target: "electron-main",
-  stats: isProduction ? "normal" : "errors-warnings",
-  mode: isProduction ? "production" : "development",
-}
+  target: 'electron15.3-main',
+  stats: isProduction ? 'normal' : 'errors-warnings',
+  mode: isProduction ? 'production' : 'development',
+};
