@@ -3,12 +3,12 @@ import { Configuration as DevServerConfiguration } from 'webpack-dev-server';
 import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import OptimizeCssAssetsPlugin from 'optimize-css-assets-webpack-plugin';
-// const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import ESLintWebpackPlugin from 'eslint-webpack-plugin';
 import merge from 'webpack-merge';
 import fs from 'fs';
 import { ElectronRunnerConfig } from './index';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const cwd = process.cwd();
@@ -168,8 +168,7 @@ let config: Configuration = {
     global: true,
   },
   plugins: [
-    // https://www.npmjs.com/package/fork-ts-checker-webpack-plugin
-    // new ForkTsCheckerWebpackPlugin(),
+    new ESLintWebpackPlugin(),
     // https://www.npmjs.com/package/ts-loader
     new webpack.WatchIgnorePlugin({
       paths: [/\.js$/, /\.d\.ts$/],
@@ -180,19 +179,12 @@ let config: Configuration = {
       template: path.resolve('public', 'index.html'),
       minify: isProduction,
     }),
-    ...(isProduction
-      ? [
-          // https://github.com/webpack-contrib/mini-css-extract-plugin
-          new MiniCssExtractPlugin({
-            filename: 'assets/styles/[name].css',
-          }),
-          // https://github.com/NMFR/optimize-css-assets-webpack-plugin
-          new OptimizeCssAssetsPlugin({}),
-        ]
-      : ([] as any[])),
+    // https://github.com/TypeStrong/fork-ts-checker-webpack-plugin
+    new ForkTsCheckerWebpackPlugin({}),
   ],
   optimization: {
     minimize: isProduction,
+    minimizer: isProduction ? [new CssMinimizerPlugin()] : undefined,
     splitChunks: isProduction
       ? {
           cacheGroups: {
@@ -209,6 +201,24 @@ let config: Configuration = {
   stats: isProduction ? 'normal' : 'errors-warnings',
   devServer: devServerOption,
 };
+
+if (config.plugins) {
+  if (isProduction) {
+    config.plugins.push(
+      new MiniCssExtractPlugin({
+        filename: 'assets/styles/[name].css',
+      }),
+      new webpack.optimize.MinChunkSizePlugin({
+        minChunkSize: 10000,
+      })
+    );
+  } else {
+    config.plugins.push(
+      new webpack.HotModuleReplacementPlugin(),
+      new webpack.SourceMapDevToolPlugin()
+    );
+  }
+}
 
 function createLessConfig(lessLoaderOption: RuleSetUseItem) {
   return [
@@ -240,7 +250,15 @@ function createTsConfig(...tsLoaderOptions: RuleSetUseItem[]) {
   return {
     test: /\.tsx?$/,
     exclude: /node_modules/,
-    use: [...tsLoaderOptions],
+    use: [
+      {
+        loader: 'babel-loader',
+        options: {
+          presets: ['@babel/preset-env', '@babel/preset-react'],
+        },
+      },
+      ...tsLoaderOptions,
+    ],
   };
 }
 

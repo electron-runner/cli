@@ -1,6 +1,6 @@
 {
   "name": "@electron-runner/cli",
-  "version": "1.2.2",
+  "version": "1.2.5",
   "description": "This is a running tool for electron applications, including the project basic development template.",
   "main": "./dist/index.js",
   "bin": {
@@ -34,7 +34,9 @@
     "chalk": "^4.1.2",
     "commander": "^8.3.0",
     "css-loader": "^6.5.1",
+    "css-minimizer-webpack-plugin": "^3.1.1",
     "download-git-repo": "^3.0.2",
+    "eslint-webpack-plugin": "^3.1.0",
     "file-loader": "^6.2.0",
     "fork-ts-checker-webpack-plugin": "^6.4.0",
     "html-webpack-plugin": "^5.5.0",
