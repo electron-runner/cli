@@ -11,6 +11,7 @@
 
 ## 当前版本
 当前版本支持 React & Typescript，支持命令启动开发以及编译。
+当前版本支持 electron@15.3.0
 
 ## 使用
 ```shell

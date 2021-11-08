@@ -2,7 +2,6 @@ import ora from 'ora';
 import path from 'path';
 import webpack from 'webpack';
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process';
-// import webpackHotMiddleware from 'webpack-hot-middleware';
 import WebpackDevServer from 'webpack-dev-server';
 import { mainConfig } from './main-config';
 import { rendererConfig } from './renderer-config';
